@@ -25,6 +25,8 @@ public final class Constants {
     public static final double LEFT_Y_DEADBAND  = 0.1;
     public static final double RIGHT_X_DEADBAND = 0.1;
     public static final double TURN_CONSTANT    = 6;
+
+    public static final double maxSpeed = 0.5; // 50% of max speed
   }
 
   public static final double ROBOT_MASS = (148 - 20.3) * 0.453592; // 32lbs * kg per pound

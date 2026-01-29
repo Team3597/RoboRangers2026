@@ -31,8 +31,8 @@ private final SwerveSubsystem       drivebase  = new SwerveSubsystem(new File(Fi
   final         CommandXboxController driverXbox = new CommandXboxController(0);
 
 SwerveInputStream driveRobotOriented = SwerveInputStream.of(drivebase.getSwerveDrive(),
-                                                              () -> driverXbox.getLeftY() * -1,
-                                                              () -> driverXbox.getLeftX() * -1)
+                                                              () -> driverXbox.getLeftY() * -1 * Constants.OperatorConstants.maxSpeed,
+                                                              () -> driverXbox.getLeftX() * -1* Constants.OperatorConstants.maxSpeed)
                                                           .withControllerRotationAxis(driverXbox::getRightX)
                                                           .deadband(OperatorConstants.DEADBAND)
                                                           .scaleTranslation(0.8)
