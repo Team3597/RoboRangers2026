@@ -31,12 +31,13 @@ private final SwerveSubsystem       drivebase  = new SwerveSubsystem(new File(Fi
   final         CommandXboxController driverXbox = new CommandXboxController(0);
 
 SwerveInputStream driveRobotOriented = SwerveInputStream.of(drivebase.getSwerveDrive(),
-                                                              () -> driverXbox.getLeftY() * -1 * Constants.OperatorConstants.maxSpeed,
-                                                              () -> driverXbox.getLeftX() * -1* Constants.OperatorConstants.maxSpeed)
+                                                              () -> driverXbox.getLeftY() * -1,
+                                                              () -> driverXbox.getLeftX() * -1)
                                                           .withControllerRotationAxis(driverXbox::getRightX)
-                                                          .deadband(OperatorConstants.DEADBAND)
-                                                          .scaleTranslation(0.8)
-                                                          .robotRelative(true);
+                                                          .scaleRotation(Constants.OperatorConstants.maxSpeed)    // slow down turn
+                                                          .scaleTranslation(Constants.OperatorConstants.maxSpeed) // slow down drive
+                                                          .robotRelative(false)
+                                                          .deadband(OperatorConstants.DEADBAND);                  // deadzone
 
 
   // The robot's subsystems and commands are defined here...
