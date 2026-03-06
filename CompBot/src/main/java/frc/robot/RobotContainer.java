@@ -6,7 +6,9 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
+import frc.robot.commands.Shoot;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import swervelib.SwerveInputStream;
 
@@ -24,11 +26,15 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
+
+  private static final ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
 private final SwerveSubsystem       drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                                 "swerve"));
 
 // Replace with CommandPS4Controller or CommandJoystick if needed
-  final         CommandXboxController driverXbox = new CommandXboxController(0);
+  final CommandXboxController driverXbox = new CommandXboxController(0);
+
+  final CommandXboxController m_gunnerXbox = new CommandXboxController(1);
 
 SwerveInputStream driveRobotOriented = SwerveInputStream.of(drivebase.getSwerveDrive(),
                                                               () -> driverXbox.getLeftY() * -1 * Constants.OperatorConstants.maxSpeed,
@@ -64,6 +70,7 @@ SwerveInputStream driveRobotOriented = SwerveInputStream.of(drivebase.getSwerveD
 
     drivebase.setDefaultCommand(driveRobotOrientedAngularVelocity);
 
+    m_gunnerXbox.rightBumper().whileTrue(new Shoot(0.5, m_ShooterSubsystem));
   }
 
   /**
