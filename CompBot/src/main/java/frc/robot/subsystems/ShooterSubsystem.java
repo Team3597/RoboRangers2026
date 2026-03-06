@@ -25,13 +25,13 @@ public class ShooterSubsystem extends SubsystemBase {
   public ShooterSubsystem() {
     shooterConfig.idleMode(IdleMode.kBrake);
     shooterConfig.inverted(false);
-    shooterConfig.smartCurrentLimit(10);
+    shooterConfig.smartCurrentLimit(40);
     shooterMotorRight.configure(shooterConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     // Following right motor but inverted
     slaveConfig.idleMode(IdleMode.kBrake);
     slaveConfig.inverted(true);
-    slaveConfig.smartCurrentLimit(10);
+    slaveConfig.smartCurrentLimit(40);
     slaveConfig.follow(shooterMotorRight);
     shooterMotorLeft.configure(shooterConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }

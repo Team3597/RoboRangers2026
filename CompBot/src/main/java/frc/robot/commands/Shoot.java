@@ -12,7 +12,7 @@ public class Shoot extends Command {
 
   private double speed;
 
-  private static ShooterSubsystem shooterSubsystem; 
+  private ShooterSubsystem shooterSubsystem; 
 
   /** Creates a new Shoot. */
   public Shoot(double speed, ShooterSubsystem shooterSubsystem) {

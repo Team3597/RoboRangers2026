@@ -70,7 +70,7 @@ SwerveInputStream driveRobotOriented = SwerveInputStream.of(drivebase.getSwerveD
 
     drivebase.setDefaultCommand(driveRobotOrientedAngularVelocity);
 
-    m_gunnerXbox.rightBumper().whileTrue(new Shoot(0.5, m_ShooterSubsystem));
+    m_gunnerXbox.button(1).whileTrue(new Shoot(0.5, m_ShooterSubsystem)); // While A depressed, schedule shoot command
   }
 
   /**
