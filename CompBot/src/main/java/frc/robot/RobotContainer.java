@@ -28,7 +28,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
 
   private static final ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
-private final SwerveSubsystem       drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
+private final SwerveSubsystem drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                                 "swerve"));
 
 // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -70,7 +70,7 @@ SwerveInputStream driveRobotOriented = SwerveInputStream.of(drivebase.getSwerveD
 
     drivebase.setDefaultCommand(driveRobotOrientedAngularVelocity);
 
-    m_gunnerXbox.button(1).whileTrue(new Shoot(0.5, m_ShooterSubsystem)); // While A depressed, schedule shoot command
+    m_gunnerXbox.button(1).whileTrue(new Shoot(0.5, m_ShooterSubsystem)); // While button A depressed, schedule shoot command
   }
 
   /**

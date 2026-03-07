@@ -18,6 +18,7 @@ public class Shoot extends Command {
   public Shoot(double speed, ShooterSubsystem shooterSubsystem) {
     this.speed = speed;
     this.shooterSubsystem = shooterSubsystem;
+    // System.out.println("Shooting at speed: " + speed ); // Debug statement to verify command execution
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(shooterSubsystem);
@@ -30,7 +31,9 @@ public class Shoot extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooterSubsystem.setShooterSpeed(speed);
+    if (this.speed > 0) { 
+      shooterSubsystem.setShooterSpeed(this.speed);
+    }
   }
 
   // Called once the command ends or is interrupted.

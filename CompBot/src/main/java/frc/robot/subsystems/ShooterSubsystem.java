@@ -23,25 +23,27 @@ public class ShooterSubsystem extends SubsystemBase {
   private static SparkMaxConfig slaveConfig = new SparkMaxConfig();
 
   public ShooterSubsystem() {
-    shooterConfig.idleMode(IdleMode.kBrake);
+    shooterConfig.idleMode(IdleMode.kCoast);
     shooterConfig.inverted(false);
     shooterConfig.smartCurrentLimit(40);
     shooterMotorRight.configure(shooterConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     // Following right motor but inverted
-    slaveConfig.idleMode(IdleMode.kBrake);
-    slaveConfig.inverted(true);
+    slaveConfig.idleMode(IdleMode.kCoast);
+    slaveConfig.inverted(true);  // DONT TOUCH BOOL!
     slaveConfig.smartCurrentLimit(40);
-    slaveConfig.follow(shooterMotorRight);
-    shooterMotorLeft.configure(shooterConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    shooterMotorLeft.configure(slaveConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 
   public void setShooterSpeed(double speed) {
     shooterMotorRight.set(speed);
+    shooterMotorLeft.set(speed);  // Inverted to spin in the same direction as right 
+    
   }
 
   public void stopShooter() {
     shooterMotorRight.stopMotor();
+    shooterMotorLeft.stopMotor();
   }
 
   @Override
