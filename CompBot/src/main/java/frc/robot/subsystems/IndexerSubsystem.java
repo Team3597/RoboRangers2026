@@ -29,15 +29,14 @@ public class IndexerSubsystem extends SubsystemBase {
     feedMotor.configure(feedConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     stablizerConfig.idleMode(IdleMode.kCoast);
-    stablizerConfig.inverted(false);
+    stablizerConfig.inverted(true);
     stablizerConfig.smartCurrentLimit(40);
     stablizerMotor.configure(stablizerConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 
    public void setIndexerSpeed(double speed) {
     feedMotor.set(speed);
-    stablizerMotor.set(speed);
-    
+    stablizerMotor.set(speed); // Inverted in config
   }
 
   public void stopIndexer() {
