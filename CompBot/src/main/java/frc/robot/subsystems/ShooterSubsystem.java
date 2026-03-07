@@ -37,7 +37,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public void setShooterSpeed(double speed) {
     shooterMotorRight.set(speed);
-    shooterMotorLeft.set(speed);  // Inverted to spin in the same direction as right 
+    shooterMotorLeft.set(speed);  // Inverted in configs to spin in the same direction as right 
     
   }
 
