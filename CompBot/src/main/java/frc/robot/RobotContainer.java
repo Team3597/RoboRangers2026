@@ -77,8 +77,9 @@ SwerveInputStream driveRobotOriented = SwerveInputStream.of(drivebase.getSwerveD
     m_gunnerXbox.button(1).whileTrue(new Shoot(1, m_ShooterSubsystem)); // While button A depressed, schedule shoot command
 
     m_gunnerXbox.button(3).whileTrue(new Index(1, m_IndexerSubsystem)); // While button X depressed, schedule shoot command
-  }
 
+    m_gunnerXbox.button(4).whileTrue(new Shoot(0.75, m_ShooterSubsystem)); // 75% speed button Y
+  }
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
