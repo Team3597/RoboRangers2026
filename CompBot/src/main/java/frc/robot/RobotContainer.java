@@ -16,8 +16,13 @@ import swervelib.SwerveInputStream;
 
 import java.io.File;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -33,20 +38,31 @@ public class RobotContainer {
   private static final IndexerSubsystem m_IndexerSubsystem = new IndexerSubsystem();
   private final SwerveSubsystem drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(), "swerve"));
 
+  private final SendableChooser<Command> autoChooser = new SendableChooser<>();
+
 // Replace with CommandPS4Controller or CommandJoystick if needed
   final CommandXboxController driverXbox = new CommandXboxController(0);
 
   final CommandXboxController m_gunnerXbox = new CommandXboxController(1);
 
-SwerveInputStream driveRobotOriented = SwerveInputStream.of(drivebase.getSwerveDrive(),
+  SwerveInputStream driveRobotOriented = SwerveInputStream.of(drivebase.getSwerveDrive(),
                                                               () -> driverXbox.getRawAxis(1) * -1 * Constants.OperatorConstants.maxSpeed,
                                                               () -> driverXbox.getRawAxis(0) * -1 * Constants.OperatorConstants.maxSpeed)
                                                               
                                                           .withControllerRotationAxis(driverXbox::getRightX)
                                                           .deadband(OperatorConstants.DEADBAND)
                                                           .scaleTranslation(0.8)
-                                                          .robotRelative(true)
+                                                          .robotRelative(false)
                                                           .scaleRotation(-0.7);
+                                                          
+SwerveInputStream driveAngularVelocity = SwerveInputStream.of(drivebase.getSwerveDrive(),
+                                                              () -> driverXbox.getRawAxis(1) * -1 * Constants.OperatorConstants.maxSpeed,
+                                                              () -> driverXbox.getRawAxis(0) * -1 * Constants.OperatorConstants.maxSpeed)
+                                                          .withControllerRotationAxis(driverXbox::getRightX)
+                                                          .deadband(OperatorConstants.DEADBAND)
+                                                          .scaleTranslation(0.8)
+                                                          .scaleRotation(-0.7)
+                                                          .allianceRelativeControl(false);
 
 
   // The robot's subsystems and commands are defined here...
@@ -70,15 +86,22 @@ SwerveInputStream driveRobotOriented = SwerveInputStream.of(drivebase.getSwerveD
 
   private void configureBindings()
   {
-    Command driveRobotOrientedAngularVelocity = drivebase.driveFieldOriented(driveRobotOriented);
+    Command driveFieldOrientedAngularVelocity = drivebase.driveFieldOriented(driveAngularVelocity);
 
-    drivebase.setDefaultCommand(driveRobotOrientedAngularVelocity);
+    drivebase.setDefaultCommand(driveFieldOrientedAngularVelocity);
 
-    m_gunnerXbox.button(1).whileTrue(new Shoot(1, m_ShooterSubsystem)); // While button A depressed, schedule shoot command
+    driverXbox.back().or(driverXbox.start()).onTrue(Commands.runOnce(() -> drivebase.resetOdometry(new Pose2d(drivebase.getPose().getTranslation(), new Rotation2d()))));
 
-    m_gunnerXbox.button(3).whileTrue(new Index(1, m_IndexerSubsystem)); // While button X depressed, schedule shoot command
+    // m_gunnerXbox.button(1).whileTrue(new Shoot(1, m_ShooterSubsystem)); // While button A depressed, schedule shoot command
 
-    m_gunnerXbox.button(4).whileTrue(new Shoot(0.75, m_ShooterSubsystem)); // 75% speed button Y
+    // m_gunnerXbox.button(3).whileTrue(new Index(1, m_IndexerSubsystem)); // While button X depressed, schedule shoot command
+
+    // m_gunnerXbox.button(4).whileTrue(new Shoot(0.75, m_ShooterSubsystem)); // 75% speed button Y
+
+    autoChooser.addOption("nothing", Commands.none());
+    autoChooser.addOption("backup auto", Autos.backupAuto(drivebase));
+    autoChooser.addOption("sweep", Autos.sweepAuto(drivebase));
+    SmartDashboard.putData(autoChooser);
   }
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -87,6 +110,6 @@ SwerveInputStream driveRobotOriented = SwerveInputStream.of(drivebase.getSwerveD
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return Autos.exampleAuto(m_exampleSubsystem);
+    return autoChooser.getSelected();
   }
 }
