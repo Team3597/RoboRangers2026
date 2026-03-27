@@ -25,16 +25,18 @@ public final class Autos {
     return Commands.sequence(Commands.runOnce(() -> drive.zeroGyroWithAlliance()), drive.driveForward().withTimeout(2));
   }
 
+  // Take a look at the drive methods, they may or may not need to be inverted
+  // Currently the auto works on only the blue allaince (????)
   public static Command sweepAuto(SwerveSubsystem drive) {
     return Commands.sequence(
       Commands.runOnce(() -> drive.zeroGyroWithAlliance()),
       Commands.waitSeconds(1.0),
-      drive.driveBackward().withTimeout(2.85),
+      drive.driveBackward().withTimeout(2.85),         // Inverted command
       Commands.runOnce(() -> drive.setChassisSpeeds(new ChassisSpeeds())),
       Commands.waitSeconds(11.0),
-      drive.driveRight().withTimeout(5),
+      drive.driveRight().withTimeout(5),               // Inverted command
       Commands.runOnce(() -> drive.setChassisSpeeds(new ChassisSpeeds())),
-      drive.driveDiagonalFowardRight().withTimeout(4),
+      drive.driveDiagonalFowardRight().withTimeout(4), // Inverted command
       Commands.runOnce(() -> drive.setChassisSpeeds(new ChassisSpeeds())));
   }
 }
