@@ -7,11 +7,12 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.Index;
+import frc.robot.commands.Intake;
 import frc.robot.commands.Shoot;
-import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
-import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
+import frc.robot.subsystems.IndexerSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import swervelib.SwerveInputStream;
 
 import java.io.File;
@@ -36,6 +37,8 @@ public class RobotContainer {
 
   private static final ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
   private static final IndexerSubsystem m_IndexerSubsystem = new IndexerSubsystem();
+  private static final IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem();
+  
   private final SwerveSubsystem drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(), "swerve"));
 
   private final SendableChooser<Command> autoChooser = new SendableChooser<>();
@@ -66,7 +69,7 @@ SwerveInputStream driveAngularVelocity = SwerveInputStream.of(drivebase.getSwerv
 
 
   // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+  //private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -92,11 +95,11 @@ SwerveInputStream driveAngularVelocity = SwerveInputStream.of(drivebase.getSwerv
 
     driverXbox.back().or(driverXbox.start()).onTrue(Commands.runOnce(() -> drivebase.resetOdometry(new Pose2d(drivebase.getPose().getTranslation(), new Rotation2d()))));
 
-    // m_gunnerXbox.button(1).whileTrue(new Shoot(1, m_ShooterSubsystem)); // While button A depressed, schedule shoot command
+    m_gunnerXbox.button(1).whileTrue(new Shoot(1.0, m_ShooterSubsystem)); // While button A depressed, schedule shoot command @ 50% 
 
-    // m_gunnerXbox.button(3).whileTrue(new Index(1, m_IndexerSubsystem)); // While button X depressed, schedule shoot command
+    m_gunnerXbox.button(3).whileTrue(new Index(1.0, 1, m_IndexerSubsystem)); // While button X depressed, schedule index command @ 50%
 
-    // m_gunnerXbox.button(4).whileTrue(new Shoot(0.75, m_ShooterSubsystem)); // 75% speed button Y
+    m_gunnerXbox.button(4).whileTrue(new Intake(1.0, m_IntakeSubsystem)); // While button Y depressed, schedule intake command @ 50% 
 
     autoChooser.addOption("nothing", Commands.none());
     autoChooser.addOption("backup auto", Autos.backupAuto(drivebase));

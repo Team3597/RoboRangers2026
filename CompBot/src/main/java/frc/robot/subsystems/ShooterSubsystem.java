@@ -16,8 +16,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class ShooterSubsystem extends SubsystemBase {
   /** Creates a new ShooterSubsystem. */
 
-  private static SparkMax shooterMotorRight = new SparkMax(9, MotorType.kBrushless);
-  private static SparkMax shooterMotorLeft = new SparkMax(10, MotorType.kBrushless);
+  private static SparkMax shooterMotorRight = new SparkMax(31, MotorType.kBrushless);
+  private static SparkMax shooterMotorLeft = new SparkMax(32, MotorType.kBrushless);
 
   private static SparkMaxConfig shooterConfig = new SparkMaxConfig();
   private static SparkMaxConfig slaveConfig = new SparkMaxConfig();
@@ -36,8 +36,8 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void setShooterSpeed(double speed) {
-    shooterMotorRight.set(speed);
-    shooterMotorLeft.set(speed);  // Inverted in configs to spin in the same direction as right 
+    shooterMotorRight.set(-speed);
+    shooterMotorLeft.set(-speed);  // Inverted in configs to spin in the same direction as right 
     
   }
 

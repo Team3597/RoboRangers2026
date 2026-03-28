@@ -15,11 +15,13 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class IndexerSubsystem extends SubsystemBase {
 
-  private static SparkMax feedMotor =  new SparkMax(12, MotorType.kBrushless);
-  private static SparkMax stablizerMotor = new SparkMax(13, MotorType.kBrushless);
+  private static SparkMax feedMotor =  new SparkMax(33, MotorType.kBrushless);
+  private static SparkMax stablizerMotor = new SparkMax(34, MotorType.kBrushless);
+  private static SparkMax hopperMotor =  new SparkMax(35, MotorType.kBrushless);
 
   private static SparkMaxConfig feedConfig = new SparkMaxConfig();
   private static SparkMaxConfig stablizerConfig = new SparkMaxConfig();
+  private static SparkMaxConfig hopperConfig = new SparkMaxConfig();
 
   /** Creates a new IndexerSubsystem. */
   public IndexerSubsystem() {
@@ -32,16 +34,24 @@ public class IndexerSubsystem extends SubsystemBase {
     stablizerConfig.inverted(true);
     stablizerConfig.smartCurrentLimit(40);
     stablizerMotor.configure(stablizerConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+    hopperConfig.idleMode(IdleMode.kCoast);
+    hopperConfig.inverted(false);
+    hopperConfig.smartCurrentLimit(40);
+    hopperMotor.configure(hopperConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 
-   public void setIndexerSpeed(double speed) {
-    feedMotor.set(speed);
-    stablizerMotor.set(speed); // Inverted in config
+   public void setIndexerSpeed(double indexerSpeed, double hopperSpeed) {
+    feedMotor.set(indexerSpeed);
+    stablizerMotor.set(indexerSpeed); // Inverted in config
+    hopperMotor.set(hopperSpeed);
   }
+
 
   public void stopIndexer() {
     feedMotor.stopMotor();
     stablizerMotor.stopMotor();
+    hopperMotor.stopMotor();
   }
 
   @Override
